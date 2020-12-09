@@ -11,10 +11,12 @@ contract MerkleDistributor is IMerkleDistributor {
 
     // This is a packed array of booleans.
     mapping(uint256 => uint256) private claimedBitMap;
+    address deployer;
 
     constructor(address token_, bytes32 merkleRoot_) public {
         token = token_;
         merkleRoot = merkleRoot_;
+        deployer = msg.sender; // the deployer address
     }
 
     function isClaimed(uint256 index) public view override returns (bool) {
@@ -32,6 +34,7 @@ contract MerkleDistributor is IMerkleDistributor {
     }
 
     function claim(uint256 index, address account, uint256 amount, bytes32[] calldata merkleProof) external override {
+        //require(account == msg.sender, 'MerkleDistributor: Only account may withdraw'); // Added
         require(!isClaimed(index), 'MerkleDistributor: Drop already claimed.');
 
         // Verify the merkle proof.
@@ -40,8 +43,31 @@ contract MerkleDistributor is IMerkleDistributor {
 
         // Mark it claimed and send the token.
         _setClaimed(index);
-        require(IERC20(token).transfer(account, amount), 'MerkleDistributor: Transfer failed.');
+        uint256 startTime = 1607495500;     // start time in unix time | december 15th, 2020 at midnight GMT = 1607990400
+        uint256 endTime = 1608000400;       // UPDATE LATER
+        uint256 nowTime = block.timestamp;
+        uint256 duraTime = nowTime - startTime;
+        require(nowTime >= startTime, 'MerkleDistributor: Too soon');
+        require(nowTime <= endTime, 'MerkleDistributor: Too late');
+        // create a ceiling for the maximum amount of timePassed
+        uint256 duraDays = duraTime / 86400 >= 90 ? 90 : duraTime / 86400; // divided by the number of seconds per day
+        require(duraDays <= 100, 'MerkleDistributor: Too late'); // double check days | negates line below, potentially : case = 91D
+        uint256 availAmount = amount * (10 + duraDays) / 100;// 10% + 1% daily
+        require(availAmount <= amount, 'MerkleDistributor: Slow your roll');// do not over-distribute
+        uint256 foreitedAmount = amount - availAmount;
 
+        require(IERC20(token).transfer(account, availAmount), 'MerkleDistributor: Transfer to Account failed.');
+        require(IERC20(token).transfer(deployer, foreitedAmount), 'MerkleDistributor: Transfer to Deployer failed.');
         emit Claimed(index, account, amount);
+    }
+
+    function collectDust(address _token, uint256 _amount) external {
+      require(msg.sender == deployer, "!deployer");
+      require(_token != token, "!token");
+      if (_token == address(0)) { // token address(0) = ETH
+        payable(deployer).transfer(_amount);
+      } else {
+        IERC20(_token).transfer(deployer, _amount);
+      }
     }
 }
