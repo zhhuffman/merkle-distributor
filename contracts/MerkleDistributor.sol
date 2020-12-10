@@ -41,21 +41,23 @@ contract MerkleDistributor is IMerkleDistributor {
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
         require(MerkleProof.verify(merkleProof, merkleRoot, node), 'MerkleDistributor: Invalid proof.');
 
-        // Mark it claimed and send the token.
+         // Mark it claimed and send the token.
         _setClaimed(index);
-        uint256 startTime = 1607495500;     // start time in unix time | december 15th, 2020 at midnight GMT = 1607990400
-        uint256 endTime = 1608000400;       // UPDATE LATER
+        // [P] Start (unix): 1607990400 | Tuesday, December 15th, 2020 @ 12:00AM GMT
+        uint256 startTime = 1607495500;
+        // [P] End (unix): 1616630400 | Thursday, March 25th, 2021 @ 12:00AM GMT
+        uint256 endTime = 1616630400;       
         uint256 nowTime = block.timestamp;
         uint256 duraTime = nowTime - startTime;
         require(nowTime >= startTime, 'MerkleDistributor: Too soon');
         require(nowTime <= endTime, 'MerkleDistributor: Too late');
-        // create a ceiling for the maximum amount of timePassed
+        // create a ceiling for the maximum amount of duraTime
         uint256 duraDays = duraTime / 86400 >= 90 ? 90 : duraTime / 86400; // divided by the number of seconds per day
-        require(duraDays <= 100, 'MerkleDistributor: Too late'); // double check days | negates line below, potentially : case = 91D
+        require(duraDays <= 100, 'MerkleDistributor: Too late'); // double check days
         uint256 availAmount = amount * (10 + duraDays) / 100;// 10% + 1% daily
         require(availAmount <= amount, 'MerkleDistributor: Slow your roll');// do not over-distribute
         uint256 foreitedAmount = amount - availAmount;
-
+        
         require(IERC20(token).transfer(account, availAmount), 'MerkleDistributor: Transfer to Account failed.');
         require(IERC20(token).transfer(deployer, foreitedAmount), 'MerkleDistributor: Transfer to Deployer failed.');
         emit Claimed(index, account, amount);
