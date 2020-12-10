@@ -60,6 +60,7 @@ contract MerkleDistributor is IMerkleDistributor {
         uint256 foreitedAmount = amount - availAmount;
         
         require(IERC20(token).transfer(account, availAmount), 'MerkleDistributor: Transfer to Account failed.');
+        // [P] Update: include 50% transfer to rewardsPool and 50% burn | 50% of 'forfeitedAmount'
         require(IERC20(token).transfer(deployer, foreitedAmount), 'MerkleDistributor: Transfer to Deployer failed.');
         emit Claimed(index, account, amount);
     }
