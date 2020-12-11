@@ -9,8 +9,13 @@
 * Update: MerkleDistributor.sol
 
 * Terminal Commands:
-	- Install dependencies ('yarn'), waffle ('yarn compile'), compile ('yarn pre-test'), mocha ('yarn test'), yarn test ('prepublishOnly')
-	- Generate merkle root: example ('yarn run ts-node scripts/generate-merkle-root.ts --input scripts/example.json')
+	- 'yarn' --> installs dependencies
+	- 'yarn compile' --> runs waffle
+	- 'yarn pretest' --> compiles
+	- 'yarn test' --> runs mocha
+	- 'Generate merkle root: example' --> runs ts-node scripts/generate-merkle-root.ts --input scripts/example.json
+	- 'yarn prepublishOnly' --> runs yarn test
+
 
 * Update: scripts/result.json to the output generated from generate merkle root: example
 	- Note: if dev (that's you) not on whitelist, then test with inclusion, then remove on new root generation and cross your fingers and hope to gawd that the new root works when the time comes for production.
