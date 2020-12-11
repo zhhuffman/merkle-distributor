@@ -1,4 +1,4 @@
-# @CryptoUnico/merkle-distributor
+# GovernorDAO Merkle Distributor Airdrop
 
 <a href="https://snyk.io/test/github/CryptoUnico/merkle-distributor?targetFile=package.json"><img src="https://snyk.io/test/github/CryptoUnico/merkle-distributor/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/CryptoUnico/merkle-distributor?targetFile=package.json" style="max-width:100%;"></a>
 
@@ -25,4 +25,4 @@
 	- Account Identifier: Cloudflare account identifier
 	- Namespace Identifier: Cloudflare KV namespace identifier 
 
-### README.md and MerkleDistributor.sol created by [Uni](https://Learn-Solidity.com)
+README.md and MerkleDistributor.sol created by [Uni](https://Learn-Solidity.com)
