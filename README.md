@@ -9,14 +9,14 @@
 * Update: MerkleDistributor.sol
 
 * Terminal Commands:
-	- install dependencies ('yarn'), compile ('yarn waffle' // 'yarn compile'), test ('yarn mocha'), prepublish only ('yarn test')
-	- generate merkle root: example ('yarn run ts-node scripts/generate-merkle-root.ts --input scripts/example.json')
+	- Install dependencies ('yarn'), compile ('yarn waffle' // 'yarn compile'), test ('yarn mocha'), prepublish only ('yarn test')
+	- Generate merkle root: example ('yarn run ts-node scripts/generate-merkle-root.ts --input scripts/example.json')
 
 * Update: scripts/result.json to the output generated from generate merkle root: example
-	- note: if dev (that's you) not on whitelist, then test with inclusion, then remove on new root generation and cross your fingers and hope to gawd that the new root works when the time comes for production.
+	- Note: if dev (that's you) not on whitelist, then test with inclusion, then remove on new root generation and cross your fingers and hope to gawd that the new root works when the time comes for production.
 
 * Run: yarn run ts-node scripts/verify-merkle-root.ts --input scripts/result.json
-	- if fail: ensure that the result.json is updated to the merkle root that aligns with input example and not from the default configuration.
+	- Resolve: ensure that the result.json is updated to the merkle root that aligns with input example and not from the default configuration.
 
 * Run: to-kv-input (with the inputs listed below)
 	- Claims Tree
