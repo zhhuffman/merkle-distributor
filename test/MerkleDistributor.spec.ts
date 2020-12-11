@@ -14,6 +14,8 @@ const overrides = {
 }
 
 const ZERO_BYTES32 = '0x0000000000000000000000000000000000000000000000000000000000000000'
+const StartTime = 1607495500;
+const EndTime = 1616630400;
 
 describe('MerkleDistributor', () => {
   const provider = new MockProvider({
@@ -34,28 +36,28 @@ describe('MerkleDistributor', () => {
 
   describe('#token', () => {
     it('returns the token address', async () => {
-      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32], overrides)
+      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32, StartTime, EndTime], overrides)
       expect(await distributor.token()).to.eq(token.address)
     })
   })
 
   describe('#merkleRoot', () => {
     it('returns the zero merkle root', async () => {
-      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32], overrides)
+      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32, StartTime, EndTime], overrides)
       expect(await distributor.merkleRoot()).to.eq(ZERO_BYTES32)
     })
   })
 
   describe('#claim', () => {
     it('fails for empty proof', async () => {
-      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32], overrides)
+      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32, StartTime, EndTime], overrides)
       await expect(distributor.claim(0, wallet0.address, 10, [])).to.be.revertedWith(
         'MerkleDistributor: Invalid proof.'
       )
     })
 
     it('fails for invalid index', async () => {
-      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32], overrides)
+      const distributor = await deployContract(wallet0, Distributor, [token.address, ZERO_BYTES32, StartTime, EndTime], overrides)
       await expect(distributor.claim(0, wallet0.address, 10, [])).to.be.revertedWith(
         'MerkleDistributor: Invalid proof.'
       )
@@ -69,7 +71,7 @@ describe('MerkleDistributor', () => {
           { account: wallet0.address, amount: BigNumber.from(100) },
           { account: wallet1.address, amount: BigNumber.from(101) },
         ])
-        distributor = await deployContract(wallet0, Distributor, [token.address, tree.getHexRoot()], overrides)
+        distributor = await deployContract(wallet0, Distributor, [token.address, tree.getHexRoot(), StartTime, EndTime], overrides)
         await token.setBalance(distributor.address, 201)
       })
 
@@ -181,7 +183,7 @@ describe('MerkleDistributor', () => {
             return { account: wallet.address, amount: BigNumber.from(ix + 1) }
           })
         )
-        distributor = await deployContract(wallet0, Distributor, [token.address, tree.getHexRoot()], overrides)
+        distributor = await deployContract(wallet0, Distributor, [token.address, tree.getHexRoot(), StartTime, EndTime], overrides)
         await token.setBalance(distributor.address, 201)
       })
 
@@ -224,7 +226,7 @@ describe('MerkleDistributor', () => {
       })
 
       beforeEach('deploy', async () => {
-        distributor = await deployContract(wallet0, Distributor, [token.address, tree.getHexRoot()], overrides)
+        distributor = await deployContract(wallet0, Distributor, [token.address, tree.getHexRoot(), StartTime, EndTime], overrides)
         await token.setBalance(distributor.address, constants.MaxUint256)
       })
       it('no double claims in random distribution', async () => {
@@ -256,7 +258,7 @@ describe('MerkleDistributor', () => {
       })
       expect(tokenTotal).to.eq('0x02ee') // 750
       claims = innerClaims
-      distributor = await deployContract(wallet0, Distributor, [token.address, merkleRoot], overrides)
+      distributor = await deployContract(wallet0, Distributor, [token.address, merkleRoot, StartTime, EndTime], overrides)
       await token.setBalance(distributor.address, tokenTotal)
     })
 
