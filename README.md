@@ -16,7 +16,7 @@
 	- Note: if dev (that's you) not on whitelist, then test with inclusion, then remove on new root generation and cross your fingers and hope to gawd that the new root works when the time comes for production.
 
 * Run: yarn run ts-node scripts/verify-merkle-root.ts --input scripts/result.json
-	- Resolve: ensure that the result.json is updated to the merkle root that aligns with input example and not from the default configuration.
+	- Resolve Failure: ensure that the result.json is updated to the merkle root that aligns with input example and not from the default configuration.
 
 * Run: to-kv-input (with the inputs listed below)
 	- Claims Tree
