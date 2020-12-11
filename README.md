@@ -9,7 +9,7 @@
 * Update: MerkleDistributor.sol
 
 * Terminal Commands:
-	- Install dependencies ('yarn'), compile ('yarn waffle' // 'yarn compile'), test ('yarn mocha'), prepublish only ('yarn test')
+	- Install dependencies ('yarn'), waffle ('yarn compile'), compile ('yarn pre-test'), mocha ('yarn test'), yarn test ('prepublishOnly')
 	- Generate merkle root: example ('yarn run ts-node scripts/generate-merkle-root.ts --input scripts/example.json')
 
 * Update: scripts/result.json to the output generated from generate merkle root: example
