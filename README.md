@@ -13,7 +13,7 @@
 	- 'yarn compile': runs waffle
 	- 'yarn pretest': compiles smart contracts
 	- 'yarn test': runs mocha
-	- 'generate merkle root: example': runs ts-node scripts/generate-merkle-root.ts --input scripts/example.json
+	- 'yarn generate-merkle-root:example': runs ts-node scripts/generate-merkle-root.ts --input scripts/example.json
 	- 'yarn prepublishOnly': runs yarn test
 
 
