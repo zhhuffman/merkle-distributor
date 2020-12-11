@@ -18,11 +18,11 @@
 * Run: yarn run ts-node scripts/verify-merkle-root.ts --input scripts/result.json
 	- Resolve Failure: ensure that the result.json is updated to the merkle root that aligns with input example and not from the default configuration.
 
-* Run: to-kv-input (with the inputs listed below)
+* Run: to-kv-input (inputs below)
 	- Claims Tree
 	- Chain-ID
 	- Token: Cloudflare API token
 	- Account Identifier: Cloudflare account identifier
 	- Namespace Identifier: Cloudflare KV namespace identifier 
 
-README.md and MerkleDistributor.sol created by [Uni](https://Learn-Solidity.com)
+Credit: README.md and MerkleDistributor.sol created by [Uni](https://Learn-Solidity.com)
