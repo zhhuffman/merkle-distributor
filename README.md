@@ -1,21 +1,28 @@
-# @uniswap/merkle-distributor
+# @CryptoUnico/merkle-distributor
 
-[![Tests](https://github.com/Uniswap/merkle-distributor/workflows/Tests/badge.svg)](https://github.com/Uniswap/merkle-distributor/actions?query=workflow%3ATests)
-[![Lint](https://github.com/Uniswap/merkle-distributor/workflows/Lint/badge.svg)](https://github.com/Uniswap/merkle-distributor/actions?query=workflow%3ALint)
 <a href="https://snyk.io/test/github/CryptoUnico/merkle-distributor?targetFile=package.json"><img src="https://snyk.io/test/github/CryptoUnico/merkle-distributor/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/CryptoUnico/merkle-distributor?targetFile=package.json" style="max-width:100%;"></a>
 
 # Local Development
 
-The following assumes the use of `node@>=10`.
+## High-Level Overview of Specification Updates
 
-## Install Dependencies
+* Update: MerkleDistributor.sol
 
-`yarn`
+* Terminal Commands:
+	- install dependencies ('yarn'), compile ('yarn waffle' // 'yarn compile'), test ('yarn mocha'), prepublish only ('yarn test')
+	- generate merkle root: example ('yarn run ts-node scripts/generate-merkle-root.ts --input scripts/example.json')
 
-## Compile Contracts
+* Update: scripts/result.json to the output generated from generate merkle root: example
+	- note: if dev (that's you) not on whitelist, then test with inclusion, then remove on new root generation and cross your fingers and hope to gawd that the new root works when the time comes for production.
 
-`yarn compile`
+* Run: yarn run ts-node scripts/verify-merkle-root.ts --input scripts/result.json
+	- if fail: ensure that the result.json is updated to the merkle root that aligns with input example and not from the default configuration.
 
-## Run Tests
+* Run: to-kv-input (with the inputs listed below)
+	- Claims Tree
+	- Chain-ID
+	- Token: Cloudflare API token
+	- Account Identifier: Cloudflare account identifier
+	- Namespace Identifier: Cloudflare KV namespace identifier 
 
-`yarn test`
+### README.md and MerkleDistributor.sol created by [Uni](https://Learn-Solidity.com)
