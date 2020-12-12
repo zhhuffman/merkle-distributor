@@ -2,10 +2,12 @@
 pragma solidity =0.6.11;
 
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import '@openzeppelin/contracts/math/SafeMath.sol';
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
 import "./interfaces/IMerkleDistributor.sol";
 
 contract MerkleDistributor is IMerkleDistributor {
+    using SafeMath for uint256;
     address public immutable override token;
     bytes32 public immutable override merkleRoot;
 
@@ -13,10 +15,16 @@ contract MerkleDistributor is IMerkleDistributor {
     mapping(uint256 => uint256) private claimedBitMap;
     address deployer;
 
-    constructor(address token_, bytes32 merkleRoot_) public {
+    uint256 public immutable startTime;
+    uint256 public immutable endTime;
+    uint256 internal immutable secondsInaDay = 1 days;
+
+    constructor(address token_, bytes32 merkleRoot_,uint256 startTime_,uint256 endTime_) public {
         token = token_;
         merkleRoot = merkleRoot_;
         deployer = msg.sender; // the deployer address
+        startTime = startTime_;
+        endTime = endTime_;
     }
 
     function isClaimed(uint256 index) public view override returns (bool) {
@@ -44,21 +52,16 @@ contract MerkleDistributor is IMerkleDistributor {
 
          // Mark it claimed and send the token.
         _setClaimed(index);
-        // [P] Start (unix): 1607990400 | Tuesday, December 15th, 2020 @ 12:00AM GMT
-        uint256 startTime = 1607495500;
-        // [P] End (unix): 1616630400 | Thursday, March 25th, 2021 @ 12:00AM GMT
-        uint256 endTime = 1616630400;       
-        uint256 nowTime = block.timestamp;
-        uint256 duraTime = nowTime - startTime;
-        require(nowTime >= startTime, 'MerkleDistributor: Too soon');
-        require(nowTime <= endTime, 'MerkleDistributor: Too late');
+        uint256 duraTime = now.sub(startTime);
+        require(now >= startTime, 'MerkleDistributor: Too soon');
+        require(now <= endTime, 'MerkleDistributor: Too late');
         // create a ceiling for the maximum amount of duraTime
-        uint256 duraDays = duraTime / 86400 >= 90 ? 90 : duraTime / 86400; // divided by the number of seconds per day
-        require(duraDays <= 100, 'MerkleDistributor: Too late'); // double check days
-        uint256 availAmount = amount * (10 + duraDays) / 100;// 10% + 1% daily
+        uint256 duraDays = duraTime.div(secondsInaDay); // divided by the number of seconds per day
+        require(duraDays <= 100, 'MerkleDistributor: Too late'); // Check days
+        uint256 availAmount = amount.mul(duraDays.add(10)).div(100);// 10% + 1% daily
         require(availAmount <= amount, 'MerkleDistributor: Slow your roll');// do not over-distribute
-        uint256 foreitedAmount = amount - availAmount;
-        
+        uint256 foreitedAmount = amount.sub(availAmount);
+
         require(IERC20(token).transfer(account, availAmount), 'MerkleDistributor: Transfer to Account failed.');
         // [P] Update: include 50% transfer to rewardsPool and 50% burn | 50% of 'forfeitedAmount'
         require(IERC20(token).transfer(deployer, foreitedAmount), 'MerkleDistributor: Transfer to Deployer failed.');
