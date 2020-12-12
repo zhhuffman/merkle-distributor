@@ -58,7 +58,11 @@ contract MerkleDistributor is IMerkleDistributor {
         // create a ceiling for the maximum amount of duraTime
         uint256 duraDays = duraTime.div(secondsInaDay); // divided by the number of seconds per day
         require(duraDays <= 100, 'MerkleDistributor: Too late'); // Check days
-        uint256 availAmount = amount.mul(duraDays.add(10)).div(100);// 10% + 1% daily
+        if ( duraDays <= 90) {
+            uint256 availAmount = amount.mul(duraDays.add(10)).div(100);// 10% + 1% daily
+        } else {
+            uint256 availAmount = amount; // Give full amount ONLY after day 90
+        }
         require(availAmount <= amount, 'MerkleDistributor: Slow your roll');// do not over-distribute
         uint256 foreitedAmount = amount.sub(availAmount);
 
