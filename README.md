@@ -1,7 +1,7 @@
 # GovernorDAO Merkle Distributor Airdrop
 
+![Tests](https://github.com/CryptoUnico/merkle-distributor/workflows/Tests/badge.svg)
 <a href="https://snyk.io/test/github/CryptoUnico/merkle-distributor?targetFile=package.json"><img src="https://snyk.io/test/github/CryptoUnico/merkle-distributor/badge.svg?targetFile=package.json" alt="Known Vulnerabilities" data-canonical-src="https://snyk.io/test/github/CryptoUnico/merkle-distributor?targetFile=package.json" style="max-width:100%;"></a>
-
 # Local Development
 
 ## High-Level Overview of Specification Updates
