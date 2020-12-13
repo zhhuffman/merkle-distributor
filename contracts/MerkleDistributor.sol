@@ -43,14 +43,14 @@ contract MerkleDistributor is IMerkleDistributor {
 
     function claim(uint256 index, address account, uint256 amount, bytes32[] calldata merkleProof) external override {
         // [P] Uncomment: line below, requiring the claim to originate from the 'account'.
-        //require(msg.sender == account, 'MerkleDistributor: Only account may withdraw');
+        require(msg.sender == account, 'MerkleDistributor: Only account may withdraw'); // ensures only account may withdraw on behalf of account
         require(!isClaimed(index), 'MerkleDistributor: Drop already claimed.');
 
-        // Verify the merkle proof.
+        // VERIFY | MERKLE PROOF
         bytes32 node = keccak256(abi.encodePacked(index, account, amount));
         require(MerkleProof.verify(merkleProof, merkleRoot, node), 'MerkleDistributor: Invalid proof.');
 
-         // Mark it claimed and send the token.
+         // CLAIM AND SEND | TOKEN TO ACCOUNT
         _setClaimed(index);
         uint256 duraTime = now.sub(startTime);
         require(now >= startTime, 'MerkleDistributor: Too soon');
